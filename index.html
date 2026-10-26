@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#111113">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="نغمة">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>NaGhma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#home"><span class="brand-mark">♫</span><span>نغمة</span></a>
+    <label class="search"><span>⌕</span><input id="searchInput" type="search"
+        placeholder="ابحث عن أغنية أو فنان أو قائمة"></label>
+    <nav class="main-nav" aria-label="التنقل الرئيسي">
+      <button class="nav-link active" data-view="listen"><span>◉</span> استمع الآن</button>
+      <button class="nav-link" data-view="browse"><span>◈</span> تصفح</button>
+    </nav>
+    <div class="side-heading">مكتبتي</div>
+    <nav class="main-nav">
+      <button class="nav-link" data-view="library"><span>♫</span> المكتبة</button>
+
+    </nav>
+    <div class="side-heading">التطبيق</div>
+    <nav class="main-nav" aria-label="إعدادات التطبيق">
+      <button class="nav-link" data-view="settings"><span>⚙</span> الإعدادات</button>
+    </nav>
+    <div class="sidebar-bottom"><button class="add-music" id="importBtn"><span>＋</span> أضف موسيقى من
+        جهازك</button><input id="fileInput" type="file"
+        accept="audio/*,.mp3,.m4a,.m4b,.m4p,.mp4,.aac,.wav,.aiff,.aif,.flac,.ogg,.oga,.opus,.caf,.amr" multiple
+        hidden><input id="coverInput" type="file" accept="image/*" hidden></div>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <header class="topbar">
+      <div><span class="eyebrow">مكتبتك الموسيقية</span>
+        <h1 id="pageTitle">استمع الآن</h1>
+      </div>
+    </header>
+    <section class="browse-page hidden" id="browsePage">
+      <div class="youtube-music-intro">
+        <span class="youtube-music-mark" aria-hidden="true">▶</span>
+        <div>
+          <span class="eyebrow red">YouTube Music</span>
+          <h2>اكتشف أغانيك وقوائمك المفضلة</h2>
+          <p>ابحث عن الأغاني والقوائم العامة وشغّل الأغاني داخل التطبيق.</p>
+        </div>
+      </div>
+      <div class="youtube-music-search">
+        <form class="browser-address-form" id="browserAddressForm">
+          <span aria-hidden="true">⌕</span>
+          <input id="browserAddressInput" type="search" placeholder="ابحث عن أغنية أو فنان أو قائمة تشغيل"
+            autocomplete="off">
+          <button type="submit">بحث</button>
+        </form>
+        <div class="youtube-search-filters" role="group" aria-label="نوع نتائج البحث">
+          <button type="button" class="selected" data-youtube-filter="songs" aria-pressed="true">أغاني</button>
+          <button type="button" data-youtube-filter="playlists" aria-pressed="false">قوائم تشغيل</button>
+        </div>
+      </div>
+      <div class="external-search-meta">
+        <span id="externalSearchStatus">ابحث عن أغنية أو قائمة تشغيل لعرض النتائج هنا.</span>
+      </div>
+      <div class="youtube-music-shortcuts" id="youtubeMusicShortcuts">
+        <button type="button" data-youtube-query="أغاني عربية جديدة" data-youtube-filter="songs">
+          <span>♫</span><strong>أغاني عربية جديدة</strong><small>استكشف أحدث الإصدارات</small>
+        </button>
+        <button type="button" data-youtube-query="الأغاني الأكثر استماعًا" data-youtube-filter="songs">
+          <span>↗</span><strong>الأغاني الرائجة</strong><small>اكتشف الأغاني الشائعة</small>
+        </button>
+        <button type="button" data-youtube-query="قوائم تشغيل عربية" data-youtube-filter="playlists">
+          <span>☷</span><strong>قوائم تشغيل عربية</strong><small>قوائم تناسب كل الأوقات</small>
+        </button>
+        <button type="button" data-youtube-query="قوائم تشغيل هادئة" data-youtube-filter="playlists">
+          <span>◷</span><strong>أجواء هادئة</strong><small>قوائم للاسترخاء والتركيز</small>
+        </button>
+      </div>
+      <div class="youtube-browse-heading">
+        <h2 id="youtubeBrowseTitle">النتائج</h2>
+        <button type="button" id="youtubePlaylistBack" class="hidden">‹ العودة إلى القوائم</button>
+      </div>
+      <div class="youtube-results" id="youtubeBrowseResults"></div>
+      <button type="button" class="youtube-load-more hidden" id="youtubeLoadMore">عرض المزيد</button>
+      <div class="youtube-search-history">
+        <div class="section-head">
+          <div><span class="eyebrow red">عمليات البحث الأخيرة</span>
+            <h2>تابع ما بحثت عنه</h2>
+          </div>
+        </div>
+        <div class="history-chips" id="browseSearchHistory"></div>
+      </div>
+    </section>
+    <section class="settings-page hidden" id="settingsPage">
+      <div class="settings-intro">
+        <span class="settings-intro-icon" aria-hidden="true">⚙</span>
+        <div>
+          <span class="eyebrow red">تخصيص التطبيق</span>
+          <h2>إعدادات نغمة</h2>
+          <p>إدارة اتصال التطبيق بخدمات YouTube وتفضيلاته.</p>
+        </div>
+      </div>
+      <section class="settings-card" aria-labelledby="youtubeSettingsTitle">
+        <div class="settings-card-heading">
+          <span class="settings-card-icon youtube-settings-icon" aria-hidden="true">▶</span>
+          <div>
+            <span class="eyebrow">مصدر الموسيقى</span>
+            <h3 id="youtubeSettingsTitle">YouTube Data API</h3>
+          </div>
+          <span class="settings-status" id="youtubeApiStatus">غير مُعدّ</span>
+        </div>
+        <p class="settings-card-description">يتيح المفتاح البحث عن الأغاني والقوائم العامة وعرضها داخل صفحة التصفح. لا
+          يلزم تسجيل الدخول إلى Google.</p>
+        <div class="youtube-api-setup" id="youtubeApiSetup">
+          <span id="youtubeApiMessage">أضف مفتاح YouTube Data API للبحث عن الأغاني والقوائم العامة.</span>
+          <button type="button" id="toggleYoutubeApiSettings">إعداد المفتاح</button>
+        </div>
+        <form class="youtube-api-key-form hidden" id="youtubeApiKeyForm">
+          <label for="youtubeApiKeyInput">مفتاح YouTube Data API</label>
+          <div>
+            <input id="youtubeApiKeyInput" type="password" autocomplete="off" spellcheck="false"
+              placeholder="أدخل مفتاح API">
+            <button type="submit">حفظ المفتاح</button>
+            <button type="button" id="clearYoutubeApiKey" class="youtube-api-clear hidden">مسح المفتاح</button>
+          </div>
+          <small>أنشئ مشروعًا في Google Cloud، وفعّل YouTube Data API v3، ثم أنشئ مفتاحًا. يُحفظ المفتاح على هذا الجهاز،
+            وتُرسل طلبات البحث إلى Google. لو كان المفتاح مقيّدًا بنطاق، شغّل التطبيق عبر HTTPS أو localhost وأضف النطاق
+            إلى القيود.</small>
+          <a href="https://developers.google.com/youtube/v3/getting-started" target="_blank"
+            rel="noopener noreferrer">دليل إعداد YouTube Data API ↗</a>
+          <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">إدارة
+            مفاتيح Google Cloud ↗</a>
+        </form>
+      </section>
+      <div class="settings-note"><span aria-hidden="true">ⓘ</span>
+        <p id="settingsKeyNote">لم تتم إضافة مفتاح بعد. يُحفظ المفتاح محليًا في هذا المتصفح، وتُرسل طلبات البحث مباشرة
+          إلى Google.</p>
+      </div>
+      <section class="settings-card player-settings-card" aria-labelledby="playerSettingsTitle">
+        <div class="settings-card-heading">
+          <span class="settings-card-icon" aria-hidden="true">♫</span>
+          <div>
+            <span class="eyebrow">تفضيلات الاستماع</span>
+            <h3 id="playerSettingsTitle">إعدادات المشغّل</h3>
+          </div>
+        </div>
+        <label class="setting-row" for="settingsVolume">
+          <span><strong>مستوى الصوت الافتراضي</strong><small>يُطبّق على مشغّل الملفات وYouTube.</small></span>
+          <span class="settings-volume-control"><input id="settingsVolume" type="range" min="0" max="1"
+              step="0.01"><output id="settingsVolumeValue" for="settingsVolume">80%</output></span>
+        </label>
+        <label class="setting-row" for="settingsAutoPlayNext">
+          <span><strong>تشغيل التالي تلقائيًا</strong><small>انتقل إلى الأغنية التالية عند انتهاء
+              الحالية.</small></span>
+          <input class="settings-switch" id="settingsAutoPlayNext" type="checkbox">
+        </label>
+        <label class="setting-row" for="settingsShuffle">
+          <span><strong>التشغيل العشوائي افتراضيًا</strong><small>ابدأ قوائم التشغيل بترتيب عشوائي.</small></span>
+          <input class="settings-switch" id="settingsShuffle" type="checkbox">
+        </label>
+        <label class="setting-row" for="settingsRepeat">
+          <span><strong>التكرار الافتراضي</strong><small>اختر طريقة تكرار الأغاني والقوائم.</small></span>
+          <select id="settingsRepeat">
+            <option value="off">إيقاف التكرار</option>
+            <option value="all">تكرار القائمة</option>
+            <option value="one">تكرار الأغنية</option>
+          </select>
+        </label>
+      </section>
+      <section class="settings-card theme-settings-card" aria-labelledby="themeSettingsTitle">
+        <div class="settings-card-heading">
+          <span class="settings-card-icon" aria-hidden="true">◐</span>
+          <div>
+            <span class="eyebrow">المظهر</span>
+            <h3 id="themeSettingsTitle">ثيم التطبيق</h3>
+          </div>
+        </div>
+        <p class="settings-card-description">اختر الألوان التي تناسبك. سيتم حفظ الثيم على هذا الجهاز.</p>
+        <div class="theme-options" role="group" aria-label="اختيار ثيم التطبيق">
+          <button type="button" class="theme-option" data-app-theme-option="dark" aria-pressed="false"><span
+              class="theme-swatch theme-swatch-dark"></span><strong>ليلي</strong></button>
+          <button type="button" class="theme-option" data-app-theme-option="ocean" aria-pressed="false"><span
+              class="theme-swatch theme-swatch-ocean"></span><strong>محيط</strong></button>
+          <button type="button" class="theme-option" data-app-theme-option="violet" aria-pressed="false"><span
+              class="theme-swatch theme-swatch-violet"></span><strong>بنفسجي</strong></button>
+          <button type="button" class="theme-option" data-app-theme-option="forest" aria-pressed="false"><span
+              class="theme-swatch theme-swatch-forest"></span><strong>غابة</strong></button>
+          <button type="button" class="theme-option" data-app-theme-option="light" aria-pressed="false"><span
+              class="theme-swatch theme-swatch-light"></span><strong>فاتح</strong></button>
+        </div>
+      </section>
+    </section>
+    <section class="content-section" id="recentSection">
+      <div class="section-head">
+        <div><span class="eyebrow red">استمع مجددًا</span>
+          <h2>الأغاني التي شُغّلت مؤخرًا</h2>
+        </div><button class="text-button" data-view="library">عرض الكل <span>‹</span></button>
+      </div>
+      <div class="recent-view-toggle view-toggle" role="group" aria-label="طريقة عرض الأغاني التي شُغّلت مؤخرًا"><button
+          id="recentGridViewBtn" type="button" aria-label="عرض شبكي" title="عرض شبكي">▦</button><button
+          id="recentListViewBtn" type="button" aria-label="عرض قائمة" title="عرض قائمة">☷</button></div>
+      <div class="album-grid" id="albumGrid"></div>
+    </section>
+    <section class="content-section activity-section" id="listenSearchSection">
+      <div class="section-head">
+        <div><span class="eyebrow red">عمليات البحث الأخيرة</span>
+          <h2>عمليات البحث الأخيرة</h2>
+        </div><button class="text-button" id="browseFromHistory">عرض سجل البحث <span>‹</span></button>
+      </div>
+      <div class="history-chips" id="listenSearchHistory"></div>
+    </section>
+    <section class="content-section library-section" id="librarySection">
+      <div class="section-head">
+        <button class="library-import-button" id="libraryImportBtn" type="button" aria-label="إضافة أغاني من جهازك"
+          title="إضافة أغاني من جهازك">＋</button>
+      </div>
+      <div class="library-folders" id="libraryFolders"></div>
+      <div class="collection-controls" id="collectionControls">
+        <div class="view-toggle" role="group" aria-label="طريقة عرض الأغاني"><button id="gridViewBtn" type="button"
+            aria-label="عرض شبكي" title="عرض شبكي">▦</button><button id="listViewBtn" type="button"
+            aria-label="عرض قائمة" title="عرض قائمة">☷</button></div>
+      </div>
+      <div class="album-grid library-browse-grid hidden" id="libraryBrowseGrid"></div>
+      <div class="track-list" id="trackList">
+        <div class="empty-state">
+          <div class="empty-note">♫</div>
+          <h3>مكتبتك فارغة</h3>
+          <p>أضف ملفاتك الصوتية من جهازك هنا.</p><button class="hero-button" id="emptyImport">اختر ملفات
+            صوتية</button>
+        </div>
+      </div>
+    </section>
+    <footer>نغمة <span>·</span> مشغّل موسيقى للملفات الصوتية وYouTube</footer>
+  </main>
+
+  <section class="now-playing" aria-label="مشغّل الموسيقى">
+    <div class="now-track">
+      <div class="mini-cover" id="miniCover">♫</div>
+      <div class="now-meta"><strong id="nowTitle">اختر أغنية لبدء الاستماع</strong><span id="nowArtist">مكتبتك
+          الموسيقية</span></div><button class="icon-button favorite" id="favoriteBtn"
+        aria-label="إضافة إلى المفضلة">♡</button>
+    </div>
+    <div class="player-center">
+      <div class="controls"><button class="control" id="shuffleBtn" aria-label="عشوائي">⤨</button><button
+          class="control" id="prevBtn" aria-label="السابق"><span dir="ltr">|▶</span></button><button
+          class="control seek-jump" id="seekBack10" aria-label="رجوع 10 ثوانٍ">⟲<small>10</small></button><button
+          class="play-button" id="playBtn" aria-label="تشغيل">▶</button><button class="control seek-jump"
+          id="seekForward10" aria-label="تقديم 10 ثوانٍ">⟳<small>10</small></button><button class="control" id="nextBtn"
+          aria-label="التالي"><span dir="ltr">◀|</span></button><button class="control" id="repeatBtn"
+          aria-label="تكرار">↻</button></div>
+      <div class="timeline"><span id="currentTime">0:00</span><input id="seekBar" type="range" min="0" max="1000"
+          value="0" aria-label="موضع الأغنية"><span id="duration">0:00</span></div>
+    </div>
+    <div class="player-extra"><span class="volume-icon">◖</span><input id="volumeBar" type="range" min="0" max="1"
+        step="0.01" value="0.8" aria-label="مستوى الصوت"><button class="icon-button queue-button" id="queueBtn"
+        aria-label="قائمة التشغيل">☷</button></div>
+  </section>
+  <div id="playerOverlay" class="player-overlay hidden" role="dialog" aria-modal="true" aria-label="مشغّل الموسيقى">
+    <div class="full-player-top"><button class="overlay-close" id="closePlayer" aria-label="إغلاق">⌄</button><span
+        id="nowPlayingLabel">اختر أغنية</span><button class="icon-button" id="overlayMore"
+        aria-label="خيارات الأغنية">•••</button></div>
+    <div class="full-cover" id="fullCover">♫</div>
+    <div class="full-track-info">
+      <div><strong id="fullTitle">اختر أغنية</strong><span id="fullArtist">مكتبتك الموسيقية</span></div><button
+        class="icon-button" id="fullFavorite" aria-label="إضافة إلى المفضلة">♡</button>
+    </div>
+    <div class="full-timeline"><input id="fullSeek" type="range" min="0" max="1000" value="0" aria-label="موضع الأغنية">
+      <div><span id="fullCurrent">0:00</span><span id="fullDuration">0:00</span></div>
+    </div>
+    <div class="full-controls"><button class="control" id="fullShuffle" aria-label="عشوائي">⤨</button><button
+        class="control big-side" id="fullPrev" aria-label="السابق">|‹</button><button class="play-button big-play"
+        id="fullPlay" aria-label="تشغيل">▶</button><button class="control big-side" id="fullNext"
+        aria-label="التالي">›|</button><button class="control" id="fullRepeat" aria-label="تكرار">↻</button></div>
+    <div class="full-extras"><button id="fullQueue">☷</button><button id="addToPlaylist">＋</button><button
+        id="sleepTimer">◷</button><label>◖ <input id="fullVolume" type="range" min="0" max="1" step="0.01"
+          value="0.8"></label></div>
+  </div>
+  <div class="youtube-player-shell hidden" id="youtubePlayerShell">
+    <div class="yt-shell-head">
+      <div><strong id="ytNowTitle">YouTube</strong><span id="ytNowArtist">يتم التشغيل في المشغّل الرسمي</span></div>
+      <button id="closeYoutubePlayer" aria-label="إغلاق مشغل YouTube">×</button>
+    </div>
+    <div id="youtubePlayer"></div>
+  </div>
+  <audio id="audioPlayer" preload="metadata"></audio>
+  <nav class="mobile-nav"><button class="active" data-view="listen"><span>◉</span>استمع</button><button
+      data-view="browse"><span>◈</span>تصفح</button><button data-view="library"><span>♫</span>المكتبة</button><button
+      data-view="settings"><span>⚙</span>الإعدادات</button></nav>
+  <script src="app.js"></script>
+</body>
+
+</html>
